@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check if the script is run as root
+# checks if the script is run as root, since root privilege is required 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
    exit 1
@@ -8,27 +8,26 @@ fi
 
 # Log file
 LOG_FILE="/var/log/user_management.log"
-echo "user_management.log created"
-PASSWORD_FILE="/var/secure/user_passwords.csv"
-echo "user_passwords.csv created"
 
-# Ensure the log and password directories/files exist
+PASSWORD_FILE="/var/secure/user_passwords.csv"
+
+# ensuring the log and password files exists
 mkdir -p /var/secure
 touch $LOG_FILE
 touch $PASSWORD_FILE
 chmod 600 $PASSWORD_FILE
 
-# Log a message
+# this function logs an action
 log() {
     echo "$(date +"%Y-%m-%d %T") - $1" | tee -a $LOG_FILE
 }
 
-# Generate a random password
+# random password for users
 generate_password() {
     tr -dc A-Za-z0-9 </dev/urandom | head -c 12
 }
 
-# Read the input file
+# input file
 INPUT_FILE=$1
 if [[ ! -f $INPUT_FILE ]]; then
     log "Input file does not exist: $INPUT_FILE"
