@@ -16,6 +16,7 @@ The create_users.sh script performs the following tasks:
     Stores passwords to /var/secure/user_passwords.csv.
 
 Here's the concise breakdown of each step on how the script is being executed.
+
 Step 1: Checking for Root Privileges
 
 The script must be run as root to perform user management tasks. The below code check for root privileges at the beginning to ensure the scrip is executed successfully
@@ -37,6 +38,7 @@ touch $PASSWORD_FILE
 chmod 600 $PASSWORD_FILE
 
 Setting chmod 600 on users_passwords.csv restricts other users except the sudo user from reading/writing to the file. This is very important for the security of other users.
+
 Step 3: Reading the Input File
 
 The following lines read the input file specified as the first argument. If the file does not exist, logs an error and exit
