@@ -35,7 +35,7 @@ if [[ ! -f $INPUT_FILE ]]; then
 fi
 
 while IFS=';' read -r username groups; do
-    # Remove leading/trailing whitespace
+    # Remove  whitespace
     username=$(echo $username | xargs)
     groups=$(echo $groups | xargs)
 
@@ -44,19 +44,19 @@ while IFS=';' read -r username groups; do
         continue
     fi
 
-    # Create the user and personal group
+    # user and personal group
     useradd -m -s /bin/bash "$username"
     log "Created user $username with home directory /home/$username"
 
-    # Set up home directory permissions
+    # home directory permissions
     chown "$username:$username" "/home/$username"
     chmod 700 "/home/$username"
     log "Set permissions for /home/$username"
 
-    # Create and add user to additional groups
+    # create and add user to additional groups
     IFS=',' read -ra group_array <<< "$groups"
     for group in "${group_array[@]}"; do
-        group=$(echo $group | xargs)  # Remove leading/trailing whitespace
+        group=$(echo $group | xargs)  # Remove whitespace
         if [[ ! $(getent group $group) ]]; then
             groupadd $group
             log "Created group $group"
@@ -65,7 +65,7 @@ while IFS=';' read -r username groups; do
         log "Added user $username to group $group"
     done
 
-    # Generate a random password and store it securely
+    # random password
     password=$(generate_password)
     echo "$username,$password" >> $PASSWORD_FILE
     echo "$username:$password" | chpasswd
